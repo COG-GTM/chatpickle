@@ -16,6 +16,9 @@ export default class LexClient extends BotClient {
         super(botContext, userContext);
         this.botName = this.botContext.botName;
         this.botAlias = this.botContext.botAlias;
+        // Generate a unique userId by combining the user's configured ID with a cryptographically
+        // secure random hex string (32 characters from 16 random bytes) to prevent collisions
+        // in highly parallel scenarios where multiple sessions might be created simultaneously
         this.userId = `${this.userContext.userId}-${crypto.randomBytes(16).toString('hex')}`;
         this.lastResponse = null;
         this.sessionAttributes = this.userContext.userAttributes;
