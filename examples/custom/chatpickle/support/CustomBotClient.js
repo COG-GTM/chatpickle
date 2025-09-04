@@ -1,5 +1,6 @@
 const { SimpleBot } = require('./SimpleBot');
 const get = require('lodash.get');
+const crypto = require('crypto');
 
 module.exports.default = class CustomBotClient {
 
@@ -12,7 +13,10 @@ module.exports.default = class CustomBotClient {
     constructor (botContext, userContext) {
         this.botContext = botContext;
         this.userContext = userContext;
-        this.userId = `${userContext.userId}-${Date.now()}`;
+        // Generate a unique userId by combining the user's configured ID with a cryptographically
+        // secure random hex string (32 characters from 16 random bytes) to prevent collisions
+        // in highly parallel scenarios where multiple sessions might be created simultaneously
+        this.userId = `${userContext.userId}-${crypto.randomBytes(16).toString('hex')}`;
 
         this.bot = new SimpleBot(botContext);
 
