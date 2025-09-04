@@ -1,5 +1,6 @@
 const { SimpleBot } = require('./SimpleBot');
 const get = require('lodash.get');
+const crypto = require('crypto');
 
 module.exports.default = class CustomBotClient {
 
@@ -12,7 +13,7 @@ module.exports.default = class CustomBotClient {
     constructor (botContext, userContext) {
         this.botContext = botContext;
         this.userContext = userContext;
-        this.userId = `${userContext.userId}-${Date.now()}`;
+        this.userId = `${userContext.userId}-${crypto.randomBytes(16).toString('hex')}`;
 
         this.bot = new SimpleBot(botContext);
 
