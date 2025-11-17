@@ -39,7 +39,7 @@
     "dependencies": {
         "aws-sdk": "^2.880.0",
         "chai": "^4.3.4",
-        "cucumber": "^6.0.5",
+        "cucumber": "^6.0.7",
         "lodash.get": "^4.4.2",
         "regex-parser": "^2.2.11"
     },
