@@ -41,7 +41,7 @@
         "chai": "^4.3.4",
         "cucumber": "^6.0.5",
         "lodash.get": "^4.4.2",
-        "regex-parser": "^2.2.11"
+        "regex-parser": "^2.3.1"
     },
     "devDependencies": {
         "@types/jest": "^26.0.22",
