@@ -1,43 +1,17 @@
 #!/usr/bin/env node
 
 import { Cli } from 'cucumber';
+import { parseArgs, buildConsumerPath, buildRunArgs, getFeatureFilePath } from './lib/cliUtils';
 
 const passthruArgs = process.argv.slice(2);
 
-let consumerPathArg;
-let featureFilePathDetected = false;
+const { consumerPathArg, featureFilePathDetected } = parseArgs(passthruArgs);
 
-for (let i = 0; i < passthruArgs.length; i++) {
-    const arg = passthruArgs[i];
-    if (arg === '--cpPath') {
-        // A chatpickle project parameter to help developers run examples while developing chatpickle
-        consumerPathArg = passthruArgs[i + 1];
-    }
-    // if argument is  parameterized
-    if (arg[0] === '-') {
-        // Skip over the value of the parameter
-        i++;
-        continue;
-    } else {
-        // Cucumber considers any non-parameterized arguments to be alternate locations of feature files
-        // If we detect this type of argument, don't hardcode the chatpickle path as a feature file location
-        featureFilePathDetected = true;
-    }
-}
+process.env.CHATPICKLE_CONSUMER_PATH_ABSOLUTE = buildConsumerPath(consumerPathArg, process.cwd());
 
-process.env.CHATPICKLE_CONSUMER_PATH_ABSOLUTE = consumerPathArg
-    ? `${process.cwd()}/${consumerPathArg}`
-    : process.cwd();
+const runArgs = buildRunArgs(passthruArgs, `${__dirname}/cucumberSupport`);
 
-const runArgs = [
-    null,
-    '',
-    ...passthruArgs,
-    '--require',
-    `${__dirname}/cucumberSupport`
-];
-
-const featureFilePath = featureFilePathDetected ? null : `${consumerPathArg || ''}chatpickle`;
+const featureFilePath = getFeatureFilePath(featureFilePathDetected, consumerPathArg);
 
 if (featureFilePath) {
     runArgs.push(featureFilePath);
