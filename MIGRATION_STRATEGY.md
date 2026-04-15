@@ -6,8 +6,8 @@
 |---|---|
 | **Current TypeScript version** | `^4.2.3` (`package.json` line 58) |
 | **Target TypeScript version** | Latest 5.x (currently `^5.8.0`) |
-| **Codebase size** | 4 TypeScript files (~120 lines total), 1 JS file copied as-is |
-| **Overall difficulty** | Low-Medium |
+| **Codebase size** | 4 TypeScript files (~180 lines total), 1 JS file copied as-is |
+| **Overall difficulty** | Low |
 | **Estimated effort** | 1-2 hours |
 
 The TypeScript code itself requires **zero changes**. The main effort is cascading dependency upgrades for the dev toolchain (Jest, ESLint, Prettier, and type definitions) to versions that support TypeScript 5.x.
@@ -121,11 +121,13 @@ The `.eslintrc.js` format is retained (with the `'prettier/@typescript-eslint'` 
 
 ### Option B: Upgrade to ESLint 9
 
-This requires migrating `.eslintrc.js` to the new flat config format (`eslint.config.js`). While this future-proofs the setup, it involves more work:
+This requires migrating `.eslintrc.js` to the new flat config format (`eslint.config.js`). While this future-proofs the setup, it involves significantly more work:
 
-- Rewrite `.eslintrc.js` as `eslint.config.js` using the new flat config API
-- Update all ESLint-related packages to their latest major versions
-- The `extends` syntax is replaced by importing and spreading config arrays
+- Rewrite `.eslintrc.js` as `eslint.config.mjs` using the new flat config API
+- Upgrade `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` to `^8.0.0` (v8 is required for ESLint 9 support; v7 only supports ESLint 8)
+- Upgrade `eslint-plugin-prettier` to `^5.0.0` and `prettier` to `^3.0.0`
+- The `extends` syntax is removed; configs are imported as modules and spread into a flat array
+- The `parser` field moves inside `languageOptions.parser`
 
 **Recommendation:** Use Option A for this migration. ESLint 9 migration can be done as a separate follow-up task.
 
@@ -228,4 +230,4 @@ These items are **not required** for the TypeScript upgrade but are worth noting
 | Prettier migration (2 to 3) | **Low** | Minimal config, may cause minor formatting differences |
 | Runtime dependencies | **None** | No runtime dependency changes required |
 
-**Overall Assessment:** Low-Medium difficulty. The codebase is small, uses only basic TypeScript features, and has a minimal test suite. The primary effort is updating `devDependencies` versions and verifying the toolchain works together. Estimated **1-2 hours** of hands-on work including validation.
+**Overall Assessment:** Low difficulty. The codebase is small, uses only basic TypeScript features, and has a minimal test suite. The primary effort is updating `devDependencies` versions and verifying the toolchain works together. Estimated **1-2 hours** of hands-on work including validation.
